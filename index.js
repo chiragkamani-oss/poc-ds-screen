@@ -2,7 +2,7 @@
 const http = require("http");
 const WebSocket = require("ws");
 const crypto = require("crypto");
-const { getRandomArticle } = require("./dummyArticles");
+const { getRandomArticle } = require("./dsArticles.data");
 
 // ---------------------- Logger ----------------------
 const Logger = {
