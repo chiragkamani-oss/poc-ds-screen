@@ -126,10 +126,14 @@ const server = http.createServer((req, res) => {
 const wsService = new PreviewWebSocketService();
 wsService.initialize(server);
 
-// Register an event to stream random articles
+// Register an event to send a random article
 wsService.on("get_random_article", async (ws, req, clientId) => {
   const article = getRandomArticle();
-  ws.send(JSON.stringify({ type: "random_article", article }));
+  ws.send(JSON.stringify({
+    data: {
+      articles: [article] // ✅ wrap in array
+    }
+  }));
 });
 
 // Optional: continuously push random articles every 5 seconds
