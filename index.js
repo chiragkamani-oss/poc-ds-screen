@@ -2,14 +2,14 @@
 const http = require("http");
 const WebSocket = require("ws");
 const crypto = require("crypto");
-const { getRandomArticle } = require("./dsArticles.data");
+const { DUMMY_DS_ARTICLES, getAvailableCategories } = require("./dsArticles.data");
 
 // ---------------------- Logger ----------------------
 const Logger = {
   info: console.log,
   warn: console.warn,
   error: console.error,
-  success: (msg) => console.log("\x1b[32m%s\x1b[0m", msg), // green
+  success: (msg) => console.log("\x1b[32m%s\x1b[0m", msg),
   debug: console.debug,
 };
 
@@ -32,14 +32,12 @@ class PreviewWebSocketService {
 
   initialize(httpServer, path = "/preview") {
     this.wss = new WebSocket.Server({ server: httpServer, path });
-
     this.wss.on("connection", this.handleConnection.bind(this));
     this.wss.on("error", (err) => Logger.error("WebSocket server error:", err));
-
     Logger.success(`WebSocket service initialized on ${path}`);
   }
 
-  handleConnection(ws, request) {
+  handleConnection(ws) {
     const clientId = this.generateClientId();
     const client = {
       id: clientId,
@@ -47,12 +45,10 @@ class PreviewWebSocketService {
       connectedAt: new Date(),
       lastActivity: new Date(),
       requestCount: 0,
-      isAnonymous: true,
     };
     this.clients.set(clientId, client);
 
     Logger.info(`Client connected: ${clientId} | Total clients: ${this.clients.size}`);
-
     ws.send(JSON.stringify({ type: "connection_established", client_id: clientId }));
 
     ws.on("message", (buffer) => this.handleMessage(ws, clientId, buffer));
@@ -103,20 +99,6 @@ class PreviewWebSocketService {
   }
 }
 
-// ---------------------- Random Articles ----------------------
-// const randomArticles = [
-//   { id: 1, title: "Breaking News: Cats Take Over the Internet" },
-//   { id: 2, title: "AI Writes Its First Novel" },
-//   { id: 3, title: "SpaceX Launches Potato Into Orbit" },
-//   { id: 4, title: "New Coffee Trend: Blue Latte" },
-//   { id: 5, title: "Time Travel Discovered in Lab Basement" },
-// ];
-
-// function getRandomArticle() {
-//   const index = Math.floor(Math.random() * randomArticles.length);
-//   return randomArticles[index];
-// }
-
 // ---------------------- Setup WebSocket Server ----------------------
 const PORT = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
@@ -127,25 +109,46 @@ const server = http.createServer((req, res) => {
 const wsService = new PreviewWebSocketService();
 wsService.initialize(server);
 
-// Register an event to send a random article
-wsService.on("get_random_article", async (ws, req, clientId) => {
-  const article = getRandomArticle();
+// ---------------------- Event Handlers ----------------------
+wsService.on("get_random_article", async (ws, req) => {
+  // Optional category filter
+  let articles = [...DUMMY_DS_ARTICLES];
+  if (req.category && req.category.toLowerCase() !== "all") {
+    const catLower = req.category.toLowerCase();
+    articles = articles.filter(a => a.CATEGORY.toLowerCase().includes(catLower));
+  }
+
+  // Optional count limit
+  const count = req.count && req.count > 0 ? Math.min(req.count, articles.length) : 1;
+
+  // Pick random articles
+  const shuffled = articles.sort(() => Math.random() - 0.5);
+  const selected = shuffled.slice(0, count);
+
   ws.send(JSON.stringify({
+    success: true,
+    event_type: "ds_articles",
     data: {
-      articles: [article] // ✅ wrap in array
-    }
+      articles: selected,
+      total: selected.length,
+      available_categories: getAvailableCategories(),
+    },
   }));
 });
 
-// Optional: broadcast random articles every 5 seconds
+// ---------------------- Optional broadcast ----------------------
 setInterval(() => {
+  const shuffled = [...DUMMY_DS_ARTICLES].sort(() => Math.random() - 0.5);
   wsService.broadcast({
+    success: true,
+    event_type: "ds_articles",
     data: {
-      articles: [getRandomArticle()] // ✅ wrap in array
-    }
+      articles: [shuffled[0]],
+      total: 1,
+      available_categories: getAvailableCategories(),
+    },
   });
 }, 5000);
 
-
-// Start HTTP server
+// ---------------------- Start server ----------------------
 server.listen(PORT, () => Logger.success(`Server listening on port ${PORT}`));
