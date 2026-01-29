@@ -3,7 +3,7 @@
  * Retail Store Products - Grocery, Fresh, Household, etc.
  * Frontend can use this data for layout binding in DS preview
  */
-export const DUMMY_DS_ARTICLES = [
+const DUMMY_DS_ARTICLES = [
   // ============ GROCERY ============
   {
     PRODUCT_NAME: "Organic Whole Milk",
@@ -373,9 +373,23 @@ export const DUMMY_DS_ARTICLES = [
   }
 ];
 
-/**
- * Get unique categories from dummy articles
- */
-export const getAvailableCategories = (): string[] => {
+
+
+function getAvailableCategories() {
   return [...new Set(DUMMY_DS_ARTICLES.map((a) => a.CATEGORY))];
+}
+
+/**
+ * Get a random article
+ */
+function getRandomArticle() {
+  const index = Math.floor(Math.random() * DUMMY_DS_ARTICLES.length);
+  return DUMMY_DS_ARTICLES[index];
+}
+
+// Export as CommonJS
+module.exports = {
+  DUMMY_DS_ARTICLES,
+  getAvailableCategories,
+  getRandomArticle
 };
