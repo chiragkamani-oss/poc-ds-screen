@@ -1,11 +1,17 @@
 {
-  "name": "websocket-server",
+  "name": "preview-websocket-server",
   "version": "1.0.0",
+  "description": "POC WebSocket server for preview with random articles",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "ws": "^8.13.0"
-  }
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }
