@@ -110,7 +110,7 @@ const wsService = new PreviewWebSocketService();
 wsService.initialize(server);
 
 // ---------------------- Event Handlers ----------------------
-wsService.on("get_random_article", async (ws, req) => {
+wsService.on("ds_article_stream", async (ws, req) => {
   // Optional category filter
   let articles = [...DUMMY_DS_ARTICLES];
   if (req.category && req.category.toLowerCase() !== "all") {
@@ -121,16 +121,22 @@ wsService.on("get_random_article", async (ws, req) => {
   // Optional count limit
   const count = req.count && req.count > 0 ? Math.min(req.count, articles.length) : 1;
 
-  // Pick random articles
+  // // Pick random articles
+  // const shuffled = articles.sort(() => Math.random() - 0.5);
+  // const selected = shuffled.slice(0, count);
+
+  // Shuffle and pick a random length, max 10
+  const maxLength = Math.min(10, articles.length);
+  const length = Math.floor(maxLength * articles.length) + 1;
   const shuffled = articles.sort(() => Math.random() - 0.5);
-  const selected = shuffled.slice(0, count);
+  const randomArticles = shuffled.slice(0, length);
 
   ws.send(JSON.stringify({
     success: true,
-    event_type: "ds_articles",
+    event_type: "ds_article_stream_data",
     data: {
-      articles: selected,
-      count: selected.length
+      articles: randomArticles,
+      count: randomArticles.length
     },
   }));
 });
@@ -139,14 +145,15 @@ wsService.on("get_random_article", async (ws, req) => {
 setInterval(() => {
   let articles = [...DUMMY_DS_ARTICLES];
 
-  // Shuffle and pick a random length
-  const length = Math.floor(Math.random() * articles.length) + 1;
+  // Shuffle and pick a random length, max 10
+  const maxLength = Math.min(10, articles.length);
+  const length = Math.floor(maxLength * articles.length) + 1;
   const shuffled = articles.sort(() => Math.random() - 0.5);
   const randomArticles = shuffled.slice(0, length);
 
   wsService.broadcast({
     success: true,
-    event_type: "ds_articles",
+    event_type: "ds_article_stream_data",
     data: {
       articles: randomArticles,
       count: randomArticles.length
