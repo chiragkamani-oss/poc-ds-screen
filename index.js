@@ -136,10 +136,15 @@ wsService.on("get_random_article", async (ws, req, clientId) => {
   }));
 });
 
-// Optional: continuously push random articles every 5 seconds
+// Optional: broadcast random articles every 5 seconds
 setInterval(() => {
-  wsService.broadcast({ type: "random_article", article: getRandomArticle() });
+  wsService.broadcast({
+    data: {
+      articles: [getRandomArticle()] // ✅ wrap in array
+    }
+  });
 }, 5000);
+
 
 // Start HTTP server
 server.listen(PORT, () => Logger.success(`Server listening on port ${PORT}`));
