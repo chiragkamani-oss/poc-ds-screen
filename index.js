@@ -2,6 +2,7 @@
 const http = require("http");
 const WebSocket = require("ws");
 const crypto = require("crypto");
+const { getRandomArticle } = require("./dummyArticles");
 
 // ---------------------- Logger ----------------------
 const Logger = {
@@ -103,18 +104,18 @@ class PreviewWebSocketService {
 }
 
 // ---------------------- Random Articles ----------------------
-const randomArticles = [
-  { id: 1, title: "Breaking News: Cats Take Over the Internet" },
-  { id: 2, title: "AI Writes Its First Novel" },
-  { id: 3, title: "SpaceX Launches Potato Into Orbit" },
-  { id: 4, title: "New Coffee Trend: Blue Latte" },
-  { id: 5, title: "Time Travel Discovered in Lab Basement" },
-];
+// const randomArticles = [
+//   { id: 1, title: "Breaking News: Cats Take Over the Internet" },
+//   { id: 2, title: "AI Writes Its First Novel" },
+//   { id: 3, title: "SpaceX Launches Potato Into Orbit" },
+//   { id: 4, title: "New Coffee Trend: Blue Latte" },
+//   { id: 5, title: "Time Travel Discovered in Lab Basement" },
+// ];
 
-function getRandomArticle() {
-  const index = Math.floor(Math.random() * randomArticles.length);
-  return randomArticles[index];
-}
+// function getRandomArticle() {
+//   const index = Math.floor(Math.random() * randomArticles.length);
+//   return randomArticles[index];
+// }
 
 // ---------------------- Setup WebSocket Server ----------------------
 const PORT = process.env.PORT || 3000;
