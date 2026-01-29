@@ -130,8 +130,7 @@ wsService.on("get_random_article", async (ws, req) => {
     event_type: "ds_articles",
     data: {
       articles: selected,
-      total: selected.length,
-      available_categories: getAvailableCategories(),
+      count: selected.length
     },
   }));
 });
@@ -150,8 +149,7 @@ setInterval(() => {
     event_type: "ds_articles",
     data: {
       articles: randomArticles,
-      total: randomArticles.length,
-      available_categories: getAvailableCategories(),
+      count: randomArticles.length
     },
   });
 }, 5000); // every 5 seconds
