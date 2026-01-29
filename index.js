@@ -13,6 +13,16 @@ const Logger = {
   debug: console.debug,
 };
 
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 // ---------------------- PreviewWebSocketService ----------------------
 class PreviewWebSocketService {
   constructor() {
@@ -125,11 +135,10 @@ wsService.on("ds_article_stream", async (ws, req) => {
   // const shuffled = articles.sort(() => Math.random() - 0.5);
   // const selected = shuffled.slice(0, count);
 
-  // Shuffle and pick a random length, max 10
-  const maxLength = Math.min(10, articles.length);
-  const length = Math.floor(maxLength * articles.length) + 1;
-  const shuffled = articles.sort(() => Math.random() - 0.5);
-  const randomArticles = shuffled.slice(0, length);
+  // Shuffle and pick random count (1 to 10)
+  const randomCount = Math.floor(Math.random() * 10) + 1;
+  const shuffled = shuffleArray(articles);
+  const randomArticles = shuffled.slice(0, Math.min(randomCount, shuffled.length));
 
   ws.send(JSON.stringify({
     success: true,
@@ -143,13 +152,12 @@ wsService.on("ds_article_stream", async (ws, req) => {
 
 // ---------------------- Interval broadcast (random-length arrays) ----------------------
 setInterval(() => {
-  let articles = [...DUMMY_DS_ARTICLES];
+  const articles = [...DUMMY_DS_ARTICLES];
 
-  // Shuffle and pick a random length, max 10
-  const maxLength = Math.min(10, articles.length);
-  const length = Math.floor(maxLength * articles.length) + 1;
-  const shuffled = articles.sort(() => Math.random() - 0.5);
-  const randomArticles = shuffled.slice(0, length);
+  // Shuffle and pick random count (1 to 10)
+  const randomCount = Math.floor(Math.random() * 10) + 1;
+  const shuffled = shuffleArray(articles);
+  const randomArticles = shuffled.slice(0, Math.min(randomCount, shuffled.length));
 
   wsService.broadcast({
     success: true,
