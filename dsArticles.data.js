@@ -6,86 +6,85 @@
 const DUMMY_DS_ARTICLES = [
   {
     PRICE_CURRENT: "4.99",
-    consumer_info_1_11: "Farm fresh organic whole milk, 1 gallon",
-    consumer_info_4_11: "1 gal",
-    consumer_info_5_11: "3.78 L",
-    name_11: "Organic Whole Milk",
-    brand_11: "Happy Farms"
+    consumer_info_1_l1: "Farm fresh organic whole milk, 1 gallon",
+    consumer_info_4_l1: "1 gal",
+    consumer_info_5_l1: "3.78 L",
+    name_l1: "Organic Whole Milk",
+    brand_l1: "Happy Farms"
   },
   {
     PRICE_CURRENT: "5.49",
-    consumer_info_1_11: "Grade A large eggs, 12 count",
-    consumer_info_4_11: "12 ct",
-    consumer_info_5_11: "680g",
-    name_11: "Free Range Eggs",
-    brand_11: "Nature's Best"
+    consumer_info_1_l1: "Grade A large eggs, 12 count",
+    consumer_info_4_l1: "12 ct",
+    consumer_info_5_l1: "680g",
+    name_l1: "Free Range Eggs",
+    brand_l1: "Nature's Best"
   },
   {
     PRICE_CURRENT: "3.99",
-    consumer_info_1_11: "Creamy Greek yogurt with real vanilla",
-    consumer_info_4_11: "32 oz",
-    consumer_info_5_11: "907g",
-    name_11: "Greek Yogurt Vanilla",
-    brand_11: "Chobani"
+    consumer_info_1_l1: "Creamy Greek yogurt with real vanilla",
+    consumer_info_4_l1: "32 oz",
+    consumer_info_5_l1: "907g",
+    name_l1: "Greek Yogurt Vanilla",
+    brand_l1: "Chobani"
   },
   {
     PRICE_CURRENT: "0.69",
-    consumer_info_1_11: "Fresh organic bananas, per lb",
-    consumer_info_4_11: "per lb",
-    consumer_info_5_11: "1 lb",
-    name_11: "Organic Bananas",
-    brand_11: "Organic Valley"
+    consumer_info_1_l1: "Fresh organic bananas, per lb",
+    consumer_info_4_l1: "per lb",
+    consumer_info_5_l1: "1 lb",
+    name_l1: "Organic Bananas",
+    brand_l1: "Organic Valley"
   },
   {
     PRICE_CURRENT: "3.99",
-    consumer_info_1_11: "Sweet and juicy red grapes",
-    consumer_info_4_11: "per lb",
-    consumer_info_5_11: "2 lb bag",
-    name_11: "Red Seedless Grapes",
-    brand_11: "Fresh Farms"
+    consumer_info_1_l1: "Sweet and juicy red grapes",
+    consumer_info_4_l1: "per lb",
+    consumer_info_5_l1: "2 lb bag",
+    name_l1: "Red Seedless Grapes",
+    brand_l1: "Fresh Farms"
   },
   {
     PRICE_CURRENT: "4.49",
-    consumer_info_1_11: "Pre-washed baby spinach leaves",
-    consumer_info_4_11: "5 oz",
-    consumer_info_5_11: "142g",
-    name_11: "Baby Spinach",
-    brand_11: "Earthbound Farm"
+    consumer_info_1_l1: "Pre-washed baby spinach leaves",
+    consumer_info_4_l1: "5 oz",
+    consumer_info_5_l1: "142g",
+    name_l1: "Baby Spinach",
+    brand_l1: "Earthbound Farm"
   },
   {
     PRICE_CURRENT: "7.99",
-    consumer_info_1_11: "Fresh boneless skinless chicken breast",
-    consumer_info_4_11: "per lb",
-    consumer_info_5_11: "1.5 lb pack",
-    name_11: "Chicken Breast Boneless",
-    brand_11: "Tyson"
+    consumer_info_1_l1: "Fresh boneless skinless chicken breast",
+    consumer_info_4_l1: "per lb",
+    consumer_info_5_l1: "1.5 lb pack",
+    name_l1: "Chicken Breast Boneless",
+    brand_l1: "Tyson"
   },
   {
     PRICE_CURRENT: "12.99",
-    consumer_info_1_11: "Fresh Atlantic salmon, skin-on fillet",
-    consumer_info_4_11: "per lb",
-    consumer_info_5_11: "1 lb",
-    name_11: "Atlantic Salmon Fillet",
-    brand_11: "Ocean Fresh"
+    consumer_info_1_l1: "Fresh Atlantic salmon, skin-on fillet",
+    consumer_info_4_l1: "per lb",
+    consumer_info_5_l1: "1 lb",
+    name_l1: "Atlantic Salmon Fillet",
+    brand_l1: "Ocean Fresh"
   },
   {
     PRICE_CURRENT: "3.49",
-    consumer_info_1_11: "100% whole wheat sliced bread",
-    consumer_info_4_11: "20 oz",
-    consumer_info_5_11: "567g",
-    name_11: "Whole Wheat Bread",
-    brand_11: "Nature's Own"
+    consumer_info_1_l1: "100% whole wheat sliced bread",
+    consumer_info_4_l1: "20 oz",
+    consumer_info_5_l1: "567g",
+    name_l1: "Whole Wheat Bread",
+    brand_l1: "Nature's Own"
   },
   {
     PRICE_CURRENT: "5.99",
-    consumer_info_1_11: "100% fresh squeezed orange juice",
-    consumer_info_4_11: "52 oz",
-    consumer_info_5_11: "1.5 L",
-    name_11: "Orange Juice Fresh",
-    brand_11: "Tropicana"
+    consumer_info_1_l1: "100% fresh squeezed orange juice",
+    consumer_info_4_l1: "52 oz",
+    consumer_info_5_l1: "1.5 L",
+    name_l1: "Orange Juice Fresh",
+    brand_l1: "Tropicana"
   }
 ];
-
 
 
 function getAvailableCategories() {
