@@ -109,9 +109,44 @@ class PreviewWebSocketService {
   }
 }
 
-// ---------------------- Setup WebSocket Server ----------------------
+// ---------------------- Setup HTTP & WebSocket Server ----------------------
 const PORT = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
+  // Enable CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+
+  // API endpoint for random articles
+  if (req.url.startsWith("/api/articles") && req.method === "GET") {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const count = parseInt(url.searchParams.get("count")) || 10;
+
+    const articles = [...DUMMY_DS_ARTICLES];
+    
+    // Shuffle and pick random articles
+    const randomCount = Math.min(count, articles.length);
+    const shuffled = shuffleArray(articles);
+    const randomArticles = shuffled.slice(0, randomCount);
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      success: true,
+      data: {
+        articles: randomArticles,
+        count: randomArticles.length
+      }
+    }));
+    return;
+  }
+
+  // Default response
   res.writeHead(200);
   res.end("WebSocket server running");
 });
@@ -120,6 +155,7 @@ const wsService = new PreviewWebSocketService();
 wsService.initialize(server);
 
 // ---------------------- Event Handlers ----------------------
+// Existing event - returns article data
 wsService.on("ds_article_stream", async (ws, req) => {
   // Optional category filter
   let articles = [...DUMMY_DS_ARTICLES];
@@ -130,10 +166,6 @@ wsService.on("ds_article_stream", async (ws, req) => {
 
   // Optional count limit
   const count = req.count && req.count > 0 ? Math.min(req.count, articles.length) : 1;
-
-  // // Pick random articles
-  // const shuffled = articles.sort(() => Math.random() - 0.5);
-  // const selected = shuffled.slice(0, count);
 
   // Shuffle and pick random count (1 to 10)
   const randomCount = Math.floor(Math.random() * 10) + 1;
@@ -150,22 +182,21 @@ wsService.on("ds_article_stream", async (ws, req) => {
   }));
 });
 
-// ---------------------- Interval broadcast (random-length arrays) ----------------------
+// New event - only triggers animation
+wsService.on("ds_article_animation_trigger", async (ws, req) => {
+  ws.send(JSON.stringify({
+    success: true,
+    event_type: "ds_article_animation_triggered",
+    message: "Animation trigger sent. Fetch articles from /api/articles"
+  }));
+});
+
+// ---------------------- Interval broadcast (animation trigger only) ----------------------
 setInterval(() => {
-  const articles = [...DUMMY_DS_ARTICLES];
-
-  // Shuffle and pick random count (1 to 10)
-  const randomCount = Math.floor(Math.random() * 10) + 1;
-  const shuffled = shuffleArray(articles);
-  const randomArticles = shuffled.slice(0, Math.min(randomCount, shuffled.length));
-
   wsService.broadcast({
     success: true,
-    event_type: "ds_article_stream_data",
-    data: {
-      articles: randomArticles,
-      count: randomArticles.length
-    },
+    event_type: "ds_article_animation_triggered",
+    timestamp: new Date().toISOString()
   });
 }, 5000); // every 5 seconds
 
