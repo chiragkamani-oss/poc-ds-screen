@@ -182,6 +182,24 @@ wsService.on("ds_article_stream", async (ws, req) => {
   }));
 });
 
+setInterval(() => {
+  const articles = [...DUMMY_DS_ARTICLES];
+
+  // Shuffle and pick random count (1 to 10)
+  const randomCount = Math.floor(Math.random() * 10) + 1;
+  const shuffled = shuffleArray(articles);
+  const randomArticles = shuffled.slice(0, Math.min(randomCount, shuffled.length));
+
+  wsService.broadcast({
+    success: true,
+    event_type: "ds_article_stream_data",
+    data: {
+      articles: randomArticles,
+      count: randomArticles.length
+    },
+  });
+}, 5000); // every 5 seconds
+
 // New event - only triggers animation
 wsService.on("ds_article_animation_trigger", async (ws, req) => {
   ws.send(JSON.stringify({
