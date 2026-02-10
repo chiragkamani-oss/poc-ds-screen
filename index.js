@@ -125,26 +125,31 @@ const server = http.createServer((req, res) => {
 
   // API endpoint for random articles
   if (req.url.startsWith("/api/articles") && req.method === "GET") {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const count = parseInt(url.searchParams.get("count")) || 10;
+  const articles = [...DUMMY_DS_ARTICLES];
 
-    const articles = [...DUMMY_DS_ARTICLES];
-    
-    // Shuffle and pick random articles
-    const randomCount = Math.min(count, articles.length);
-    const shuffled = shuffleArray(articles);
-    const randomArticles = shuffled.slice(0, randomCount);
+  // Generate random length (1 to 10)
+  const randomCount = Math.floor(Math.random() * 10) + 1;
 
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({
+  // Shuffle and pick random articles
+  const shuffled = shuffleArray(articles);
+  const randomArticles = shuffled.slice(
+    0,
+    Math.min(randomCount, articles.length)
+  );
+
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(
+    JSON.stringify({
       success: true,
       data: {
         articles: randomArticles,
-        count: randomArticles.length
-      }
-    }));
-    return;
-  }
+        count: randomArticles.length,
+      },
+    })
+  );
+  return;
+}
+
 
   // Default response
   res.writeHead(200);
